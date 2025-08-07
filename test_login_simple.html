@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Login Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .form-group { margin: 10px 0; }
+        input { padding: 8px; margin: 5px; width: 200px; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; }
+        .result { margin: 20px 0; padding: 10px; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Simple Login Test</h1>
+    
+    <form id="loginForm">
+        <div class="form-group">
+            <label>Username:</label><br>
+            <input type="text" id="username" value="yagavollateja" />
+        </div>
+        <div class="form-group">
+            <label>Password:</label><br>
+            <input type="password" id="password" value="admin123" />
+        </div>
+        <button type="submit">Test Login</button>
+    </form>
+    
+    <div id="result"></div>
+    
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const resultDiv = document.getElementById('result');
+            
+            resultDiv.innerHTML = '<div>🔄 Testing login...</div>';
+            
+            try {
+                // Test 1: Direct API call
+                console.log('🔐 Testing direct API call...');
+                
+                const formData = new URLSearchParams();
+                formData.append('username', username);
+                formData.append('password', password);
+                
+                const response = await fetch('http://localhost:8000/api/v1/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: formData
+                });
+                
+                const data = await response.json();
+                console.log('📥 API Response:', response.status, data);
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            <h3>✅ Login Successful!</h3>
+                            <p><strong>User:</strong> ${data.user.full_name || data.user.username}</p>
+                            <p><strong>Role:</strong> ${data.user.role}</p>
+                            <p><strong>Email:</strong> ${data.user.email}</p>
+                            <p><strong>Token:</strong> ${data.access_token.substring(0, 50)}...</p>
+                            <hr>
+                            <p><strong>Next Steps:</strong></p>
+                            <ul>
+                                <li>✅ Backend API is working correctly</li>
+                                <li>🔍 Check React frontend console for errors</li>
+                                <li>🌐 Visit <a href="http://localhost:3000/login" target="_blank">http://localhost:3000/login</a></li>
+                            </ul>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            <h3>❌ Login Failed</h3>
+                            <p><strong>Status:</strong> ${response.status}</p>
+                            <p><strong>Error:</strong> ${data.detail || 'Unknown error'}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('❌ Error:', error);
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h3>❌ Network Error</h3>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <p>Make sure the backend server is running on http://localhost:8000</p>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
