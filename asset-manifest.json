@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/BFSI_AI-Agent/static/css/main.29bcbc3c.css",
+    "main.js": "/BFSI_AI-Agent/static/js/main.e7badab1.js",
+    "index.html": "/BFSI_AI-Agent/index.html",
+    "main.29bcbc3c.css.map": "/BFSI_AI-Agent/static/css/main.29bcbc3c.css.map",
+    "main.e7badab1.js.map": "/BFSI_AI-Agent/static/js/main.e7badab1.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.29bcbc3c.css",
+    "static/js/main.e7badab1.js"
+  ]
+}
